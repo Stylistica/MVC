@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-Trade..buy and sell some stock
-<%=request.getAttribute("s") %>
+Trade..buy   sell some stock
+<%out.print(request.getAttribute("s")) ;%>
 </body>
 </html>

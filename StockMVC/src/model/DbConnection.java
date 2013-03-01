@@ -16,13 +16,10 @@ import org.sqlite.SQLiteConfig;
 
 
 public class DbConnection {
-	  Connection connection;
+	 
 	 void DBConnection() throws ClassNotFoundException, SQLException
 	{
-		Class.forName("org.sqlite.JDBC");
-		SQLiteConfig config = new SQLiteConfig();  
-		config.enforceForeignKeys(true);  
-        connection = DriverManager.getConnection("jdbc:sqlite:stock.db",config.toProperties());
+		 
 		
 	}
 	public void display(){System.out.print("helloa");}
@@ -34,7 +31,7 @@ public class DbConnection {
 		  ArrayList list = new ArrayList(50);
 		  while (rs.next())
 		  {
-		     HashMap row = new HashMap(columns);
+		    HashMap row = new HashMap(columns);
 		     for(int i=1; i<=columns; ++i){           
 		      row.put(md.getColumnName(i),rs.getObject(i));
 		     }
@@ -47,6 +44,16 @@ public class DbConnection {
 	
 	public void print() throws SQLException
 	{
+		Connection connection;
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SQLiteConfig config = new SQLiteConfig();  
+		config.enforceForeignKeys(true);  
+        connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
 	    // load the sqlite-JDBC driver using the current class loader
 	      Statement statement = connection.createStatement();
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -71,24 +78,72 @@ public class DbConnection {
 	      }*/
 	 }
 	
-	public ArrayList getRanking() throws SQLException, ClassNotFoundException
+	public String getRanking() 
 	{
+		try {
+	
+			Class.forName("org.sqlite.JDBC");
+		
+	    Connection connection = null;
+	    try
+	    {
+	      SQLiteConfig config = new SQLiteConfig();  
+		  config.enforceForeignKeys(true);  
+	      connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+	      Statement statement = connection.createStatement();
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      
+	      //statement.executeUpdate("drop table if exists person");
+	     // statement.executeUpdate("create table person (id integer, name string)");
+	     // statement.executeUpdate("insert into person values(3, 'msd')");
+	     // statement.executeUpdate("insert into person values(4, 'abccccccccccccccccccccccccccccccc')");
+	      ResultSet rs = statement.executeQuery("select * from user");
+	      String s=null;
+	      while(rs.next())
+	      {
+	        // read the result set
+	        System.out.println("name = " + rs.getString("name"));
+	        System.out.println("id = " + rs.getInt("userid"));
+	        s= rs.getString("name");
+	        
+	      }
+	      return s;
+	    }
+	    catch(SQLException e)
+	    {
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    }
+	    finally
+	    {
+	      try
+	      {
+	        if(connection != null)
+	          connection.close();
+	      }
+	      catch(SQLException e)
+	      {
+	        // connection close failed.
+	        System.err.println(e);
+	      }
+	    }
+	    } catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+	}	
+	
+	
+	
+	public HashMap getUser(int uid) throws SQLException, ClassNotFoundException
+	{
+		Connection connection;
 		Class.forName("org.sqlite.JDBC");
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
-        connection = DriverManager.getConnection("jdbc:sqlite:stock.db",config.toProperties());
-		Statement statement = connection.createStatement();
-	    statement.setQueryTimeout(30); 
-	   // statement.executeUpdate("insert into TRANSACT (userID,stock,quantity,_time,buy_sell,price) values  (1,'AAPL',20,'12:30',1,342.9)");
-	    ResultSet rs = statement.executeQuery("select userID,email_id,name,amount from user order by amount desc");
-		ArrayList li=resultSetToArrayList(rs);
-		return li;
-	}
-	
-	
-	
-	public HashMap getUser(int uid) throws SQLException
-	{
+        connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
 		PreparedStatement statement = connection.prepareStatement("select email_id,name,amount from user where userID= ?");
 		statement.setInt(1,uid);	    
 	    ResultSet rs = statement.executeQuery();
@@ -102,8 +157,13 @@ public class DbConnection {
 	
 	
 	
-	public float getAmount(int uid)throws SQLException
+	public float getAmount(int uid)throws SQLException, ClassNotFoundException
 	{
+		Connection connection;
+		Class.forName("org.sqlite.JDBC");
+		SQLiteConfig config = new SQLiteConfig();  
+		config.enforceForeignKeys(true);  
+        connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
 		PreparedStatement statement = connection.prepareStatement("select amount from user where userID= ?");
 		statement.setInt(1,uid);
 		ResultSet rs = statement.executeQuery();
@@ -118,10 +178,11 @@ public class DbConnection {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SS");
         String strDate = sdf.format(cal.getTime());
         PreparedStatement statement ;
-        Class.forName("org.sqlite.JDBC");
+        Connection connection;
+		Class.forName("org.sqlite.JDBC");
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
-        connection = DriverManager.getConnection("jdbc:sqlite:stock.db",config.toProperties());
+        connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
       //  System.out.println("Current date in String Format: " + strDate);
 		try
 		{
@@ -178,10 +239,11 @@ public class DbConnection {
 	
 	public void sell(int uid , String stock,int quantity, float sellPrice ,float buyPrice,boolean shortsell) throws SQLException, ClassNotFoundException
 	{
+		Connection connection;
 		Class.forName("org.sqlite.JDBC");
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
-        connection = DriverManager.getConnection("jdbc:sqlite:stock.db",config.toProperties());
+        connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
 		Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SS");
         String strDate = sdf.format(cal.getTime());
@@ -226,10 +288,11 @@ public class DbConnection {
 	
 	public void updateAmt(int uid,float amount) throws SQLException, ClassNotFoundException
 	{
+		Connection connection;
 		Class.forName("org.sqlite.JDBC");
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
-        connection = DriverManager.getConnection("jdbc:sqlite:stock.db",config.toProperties());
+        connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
 		PreparedStatement statement = connection.prepareStatement("update user set amount = ? where userID = ?");
 		statement.setFloat(1, amount);
 		statement.setInt(2,uid);
@@ -240,10 +303,11 @@ public class DbConnection {
 	}
 	public void addUser(String name,String email_id , String Password) throws ClassNotFoundException, SQLException
 	{
+		Connection connection;
 		Class.forName("org.sqlite.JDBC");
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
-        connection = DriverManager.getConnection("jdbc:sqlite:stock.db",config.toProperties());
+        connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
         PreparedStatement statement = connection.prepareStatement("insert into user(name,email_ID,password) values (?,?,?)");
         
 		statement.setString(1, name);
@@ -256,10 +320,11 @@ public class DbConnection {
 	
 	public ArrayList getTransactions(int uid) throws SQLException, ClassNotFoundException
 	{
+		Connection connection;
 		Class.forName("org.sqlite.JDBC");
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
-        connection = DriverManager.getConnection("jdbc:sqlite:stock.db",config.toProperties());
+        connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
 		PreparedStatement statement = connection.prepareStatement("select * from transact where userId= ? ");
 		statement.setInt(1,uid);	    
 	    ResultSet rs = statement.executeQuery();
@@ -278,7 +343,7 @@ public class DbConnection {
 		 DbConnection s1=new DbConnection();
 	//	s1.sell(1, "AAPL", 40, 340.4f, 340.4f, false);
 	  //System.out.println(s1.getTransactions(1));
-	 // s1.addUser("msd", "ud", "abc");
+	 s1.addUser("msd1", "ud1", "abc1");
 	  System.out.println(s1.getRanking() );
 	  System.out.println(s1.getTransactions(1));
 			s1.display();
