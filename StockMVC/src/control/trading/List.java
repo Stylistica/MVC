@@ -44,7 +44,7 @@ public class List extends HttpServlet {
 		DbConnetion a=new DbConnetion();
 		ArrayList al=a.getRanking();
 		request.setAttribute("s", al);
-		
+		a.addUser("viv"," email_id", "Password");
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/List.jsp");
 	    view.forward(request, response); 
 

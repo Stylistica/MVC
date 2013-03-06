@@ -379,6 +379,11 @@ public class DbConnetion {
 				statement.executeUpdate();
 				statement.close();
 			}
+			statement = connection.prepareStatement("update user set amount = amount + ? where userID= ? ");
+			statement.setFloat(1,quantity*sellPrice);
+			statement.setInt(2, uid);
+			statement.executeUpdate();
+			statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -458,6 +463,12 @@ public class DbConnetion {
 				statement.executeUpdate();
 				statement.close();
 			}
+			statement = connection.prepareStatement("update user set amount = amount - ? where userID= ? ");
+			statement.setFloat(1,quantity*buyPrice);
+			statement.setInt(2, uid);
+			statement.executeUpdate();
+			statement.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
