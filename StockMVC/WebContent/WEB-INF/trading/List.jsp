@@ -14,7 +14,19 @@ ArrayList styles = (ArrayList) request.getAttribute("s");
 Iterator it = styles.iterator();
 while(it.hasNext())
 {
-	  out.print("<br>User: " + it.next());
-}  %>
+	  out.println("<br>User: " + it.next());
+}
+HashMap a=(HashMap)request.getAttribute("s1");
+
+Iterator iterator = a.keySet().iterator();  
+
+while (iterator.hasNext()) {  
+   String key = iterator.next().toString();  
+   String value = a.get(key).toString();  
+   
+   out.println(key + " " + value);  
+}  
+
+%>
 </body>
 </html>

@@ -5,9 +5,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/Quote1Script.js"></script>
+
 </head>
 <body>
+<script type="text/javascript">
+     
+</script>
 Trade..buy   sell some stock
-<%out.print(request.getAttribute("s")) ;%>
+   <div id="quotesWrapper"></div>
+ 
+
 </body>
 </html>
