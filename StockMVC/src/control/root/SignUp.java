@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.DbConnetion;
+import model.DbConnection;
 
 /**
  * Servlet implementation class SignUp
@@ -33,9 +33,9 @@ public class SignUp extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		DbConnetion db=new DbConnetion();
-		String ps=db.getPassword("ud");
-		request.setAttribute("ps", ps);
+		//DbConnection db=new DbConnection();
+		//String ps=db.getPassword("ud");
+		//request.setAttribute("ps", ps);
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/root/SignUp.jsp");
 	    view.forward(request, response); 
 	}

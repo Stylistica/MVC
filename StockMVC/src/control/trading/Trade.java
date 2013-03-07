@@ -1,6 +1,5 @@
 package control.trading;
 import model.DbConnection;
-import model.DbConnetion;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class Trade
@@ -34,12 +34,37 @@ public class Trade extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.print("hellow");  
-		DbConnetion db=new DbConnetion();
-		//db.sell(1, "AAPL", 40, 340.4f, 340.4f, false);
-		//db.buy(1, "AAPL", 40, 340.4f,  false);
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/Trade.jsp");
-	    view.forward(request, response); 
+
+		 HttpSession session = request.getSession();
+			boolean access;	
+			 if(session.getAttribute("login")==null)
+					access=false;
+				
+			 else
+					 access=(boolean)session.getAttribute("login");
+			System.out.print(access);	
+			 
+			 if(access==true)
+				{
+
+					System.out.print("hellow");  
+					DbConnection db=new DbConnection();
+					//db.sell(1, "AAPL", 40, 340.4f, 340.4f, false);
+					//db.buy(1, "AAPL", 40, 340.4f,  false);
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/Trade.jsp");
+				    view.forward(request, response); 
+
+}
+				else
+				{
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/root/ReLogin.jsp");
+				    view.forward(request, response); 
+
+					}
+
+
+		
+		
 	}
 
 	/**
@@ -48,8 +73,33 @@ public class Trade extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/Trade.jsp");
-	    view.forward(request, response); 
+
+		 HttpSession session = request.getSession();
+			boolean access;	
+			 if(session.getAttribute("login")==null)
+					access=false;
+				
+			 else
+					 access=(boolean)session.getAttribute("login");
+			System.out.print(access);	
+			 
+			 if(access==true)
+				{
+
+					System.out.print("hellow");  
+					DbConnection db=new DbConnection();
+					//db.sell(1, "AAPL", 40, 340.4f, 340.4f, false);
+					//db.buy(1, "AAPL", 40, 340.4f,  false);
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/Trade.jsp");
+				    view.forward(request, response); 
+
+}
+				else
+				{
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/root/ReLogin.jsp");
+				    view.forward(request, response); 
+
+					}
 
 	}
 

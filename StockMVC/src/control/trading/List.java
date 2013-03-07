@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import org.sqlite.SQLiteConfig;
 
 import model.DbConnection;
-import model.DbConnetion;
 
 /**
  * Servlet implementation class List
@@ -41,12 +40,36 @@ public class List extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		DbConnetion a=new DbConnetion();
-		ArrayList al=a.getRanking();
-		request.setAttribute("s", al);
-		a.addUser("viv"," email_id", "Password");
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/List.jsp");
-	    view.forward(request, response); 
+		
+		
+		 HttpSession session = request.getSession();
+			boolean access;	
+			 if(session.getAttribute("login")==null)
+					access=false;
+				
+			 else
+					 access=(boolean)session.getAttribute("login");
+			System.out.print(access);	
+			 
+			 if(access==true)
+				{
+
+				 DbConnection a=new DbConnection();
+					ArrayList al=a.getRanking();
+					request.setAttribute("s", al);
+					HashMap a2=a.getUser(1);
+					request.setAttribute("s1", a2);
+				
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/List.jsp");
+				    view.forward(request, response); 
+
+}
+				else
+				{
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/root/ReLogin.jsp");
+				    view.forward(request, response); 
+
+					}
 
 	}
 
@@ -57,8 +80,34 @@ public class List extends HttpServlet {
 		// TODO Auto-generated method stub
 		//request.setAttribute("a",100);
 		//request.setAttribute("List",100);
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/List.jsp");
-	    view.forward(request, response); 
+		 HttpSession session = request.getSession();
+			boolean access;	
+			 if(session.getAttribute("login")==null)
+					access=false;
+				
+			 else
+					 access=(boolean)session.getAttribute("login");
+			System.out.print(access);	
+			 
+			 if(access==true)
+				{
+
+				 DbConnection a=new DbConnection();
+					ArrayList al=a.getRanking();
+					request.setAttribute("s", al);
+					HashMap a2=a.getUser(1);
+					request.setAttribute("s1", a2);
+				
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/trading/List.jsp");
+				    view.forward(request, response); 
+
+}
+				else
+				{
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/root/ReLogin.jsp");
+				    view.forward(request, response); 
+
+					}
 
 
 	}

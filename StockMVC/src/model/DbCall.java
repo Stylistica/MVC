@@ -11,7 +11,7 @@ public class DbCall {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		DbConnetion a=new DbConnetion();
+		DbConnection a=new DbConnection();
 		a.print();
 
 	}

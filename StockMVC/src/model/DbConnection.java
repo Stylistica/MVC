@@ -27,7 +27,7 @@ public class DbConnection {
 	    {
 	      SQLiteConfig config = new SQLiteConfig();  
 		  config.enforceForeignKeys(true);  
-	      connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVCstock.db",config.toProperties());
+	      connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 	      Statement statement = connection.createStatement();
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      
@@ -104,6 +104,12 @@ public class DbConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		  try {
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		 return list;
 	}
 	public ArrayList getRanking() 
@@ -116,7 +122,7 @@ public class DbConnection {
 	    {
 	      SQLiteConfig config = new SQLiteConfig();  
 		  config.enforceForeignKeys(true);  
-	      connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+	      connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 	      Statement statement = connection.createStatement();
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      
@@ -136,9 +142,7 @@ public class DbConnection {
 	    }
 	    finally
 	    {
-	      try
-	      {
-	        if(connection != null)
+	      try{
 	          connection.close();
 	      }
 	      catch(SQLException e)
@@ -165,7 +169,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -191,7 +195,51 @@ public class DbConnection {
 			e.printStackTrace();
 		}
 		ArrayList li=resultSetToArrayList(rs);
+		try {
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return li;
+	}
+	public void test()
+	{
+	
+		Connection connection = null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SQLiteConfig config = new SQLiteConfig();  
+		config.enforceForeignKeys(true);  
+        try {
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement("insert into user(name,email_ID,password) values (?,?,?)");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		try {
+			statement.setString(1, "vivek");
+			statement.setString(2,"vivek");
+			statement.setString(3,"asd");
+			statement.executeUpdate();
+			statement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 	public ArrayList getPortFolio(int uid) 
 	{
@@ -205,7 +253,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -230,8 +278,7 @@ public class DbConnection {
 		return li;
 	}
 	public void addUser(String name,String email_id , String Password) 
-	{
-		Connection connection = null;
+	{	Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -241,7 +288,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -260,13 +307,12 @@ public class DbConnection {
 			statement.setString(3,Password);
 			statement.executeUpdate();
 			statement.close();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		        
-	}
+			}
 	public void updateAmt(int uid,float amount)
 	{
 		Connection connection = null;
@@ -279,7 +325,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -316,7 +362,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -379,17 +425,13 @@ public class DbConnection {
 				statement.executeUpdate();
 				statement.close();
 			}
-			statement = connection.prepareStatement("update user set amount = amount + ? where userID= ? ");
-			statement.setFloat(1,quantity*sellPrice);
-			statement.setInt(2, uid);
-			statement.executeUpdate();
-			statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}	
+	@SuppressWarnings("resource")
 	public void buy(int uid , String stock,int quantity, float buyPrice ,boolean shortsell) 
 	{
 		Calendar cal = Calendar.getInstance();
@@ -406,7 +448,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -463,12 +505,6 @@ public class DbConnection {
 				statement.executeUpdate();
 				statement.close();
 			}
-			statement = connection.prepareStatement("update user set amount = amount - ? where userID= ? ");
-			statement.setFloat(1,quantity*buyPrice);
-			statement.setInt(2, uid);
-			statement.executeUpdate();
-			statement.close();
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -487,7 +523,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -534,7 +570,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -555,6 +591,7 @@ public class DbConnection {
 		    row = new HashMap(columns);
 		    for(int i=1; i<=columns; ++i)          
 		    	row.put(md.getColumnName(i),rs.getObject(i));
+		    connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -574,7 +611,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\v1v3k\\Downloads\\MVC-master\\MVC-master\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -612,8 +649,11 @@ public class DbConnection {
 	public static void main(String[] args) 
 	  {
 		 DbConnection s1=new DbConnection();
-			s1.print();
-			s1.display();
+		 ArrayList al=s1.getPortFolio(1);
+		 System.out.print(al);
+		 s1.test();
+			//s1.print();
+			//s1.display();
 			}
 
 }

@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class WelcomeMarket
@@ -29,10 +30,30 @@ public class WelcomeMarket extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		 HttpSession session = request.getSession();
+			boolean access;	
+			 if(session.getAttribute("login")==null)
+					access=false;
+				
+			 else
+					 access=(boolean)session.getAttribute("login");
+			System.out.print(access);	
+			 
+			 if(access==true)
+				{
 
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/market/Welcome.jsp");
-	    view.forward(request, response); 
-	}
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/market/Welcome.jsp");
+				    view.forward(request, response); 
+}
+				else
+				{
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/root/ReLogin.jsp");
+				    view.forward(request, response); 
+
+					}
+
+
+		}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -40,8 +61,28 @@ public class WelcomeMarket extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/market/Welcome.jsp");
-	    view.forward(request, response); 
+		 HttpSession session = request.getSession();
+			boolean access;	
+			 if(session.getAttribute("login")==null)
+					access=false;
+				
+			 else
+					 access=(boolean)session.getAttribute("login");
+			System.out.print(access);	
+			 
+			 if(access==true)
+				{
+
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/market/Welcome.jsp");
+				    view.forward(request, response); 
+}
+				else
+				{
+					RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/root/ReLogin.jsp");
+				    view.forward(request, response); 
+
+					}
+
 
 	}
 
