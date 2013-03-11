@@ -197,6 +197,7 @@ public class DbConnection {
 		ArrayList li=resultSetToArrayList(rs);
 		try {
 			rs.close();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -270,6 +271,7 @@ public class DbConnection {
 	    ResultSet rs = null;
 		try {
 			rs = statement.executeQuery();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -342,7 +344,7 @@ public class DbConnection {
 			statement.setInt(2,uid);
 			statement.executeUpdate();
 			statement.close();
-			
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -350,9 +352,11 @@ public class DbConnection {
 		
 		
 	}
+	@SuppressWarnings("resource")
 	public void sell(int uid , String stock,int quantity, float sellPrice ,float buyPrice) 
 	{
 		Connection connection = null;
+		ResultSet rs=null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -402,7 +406,7 @@ public class DbConnection {
 			stmt.setInt(1, uid);
 			stmt.setString(2, stock);
 			stmt.setFloat(3, buyPrice);
-			ResultSet rs=stmt.executeQuery();
+			rs=stmt.executeQuery();
 			int x=rs.getInt(1);
 			if(x==quantity)
 			{
@@ -412,7 +416,7 @@ public class DbConnection {
 				statement.setFloat(3, buyPrice);
 				
 				statement.executeUpdate();
-				statement.close();
+				
 			}
 			else
 			{
@@ -422,17 +426,20 @@ public class DbConnection {
 				statement.setString(3, stock);
 				statement.setFloat(4, buyPrice);
 				statement.executeUpdate();
-				statement.close();
+				
 			}
-			statement = connection.prepareStatement("update user set amount = amount + ? where userID= ? ");
-			statement.setFloat(1,quantity*sellPrice);
-			statement.setInt(2, uid);
-			statement.executeUpdate();
 			statement.close();
+			PreparedStatement ps = connection.prepareStatement("update user set amount = amount + ? where userID= ? ");
+			ps.setFloat(1,quantity*sellPrice);
+			ps.setInt(2, uid);
+			ps.executeUpdate();
+			ps.close();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 	}	
 	@SuppressWarnings("resource")
@@ -514,6 +521,7 @@ public class DbConnection {
 			statement.setInt(2, uid);
 			statement.executeUpdate();
 			statement.close();
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -559,6 +567,7 @@ public class DbConnection {
 			e.printStackTrace();
 		}
 		try {
+			connection.close();
 			return rs.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -647,6 +656,7 @@ public class DbConnection {
 			e.printStackTrace();
 		}
 		try {
+			connection.close();
 			return rs.getString(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -658,7 +668,7 @@ public class DbConnection {
 	public static void main(String[] args) 
 	  {
 		 DbConnection s1=new DbConnection();
-		// s1.addUser("msd", "ms@d", "abc");
+		s1.sell(2,"AAPL",5,340.8f,340.4f);
 		 System.out.print( s1.getRanking());
 		
 		 
