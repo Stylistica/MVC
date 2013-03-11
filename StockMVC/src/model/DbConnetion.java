@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 import org.sqlite.SQLiteConfig;
 
-public class DbConnection {
+public class DbConnetion {
 	public void display(){System.out.print("hloa");}
 	
 	public String print(){
@@ -27,7 +27,7 @@ public class DbConnection {
 	    {
 	      SQLiteConfig config = new SQLiteConfig();  
 		  config.enforceForeignKeys(true);  
-	      connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+	      connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVCstock.db",config.toProperties());
 	      Statement statement = connection.createStatement();
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      
@@ -104,12 +104,6 @@ public class DbConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		  try {
-			rs.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		 return list;
 	}
 	public ArrayList getRanking() 
@@ -142,7 +136,9 @@ public class DbConnection {
 	    }
 	    finally
 	    {
-	      try{
+	      try
+	      {
+	        if(connection != null)
 	          connection.close();
 	      }
 	      catch(SQLException e)
@@ -195,51 +191,7 @@ public class DbConnection {
 			e.printStackTrace();
 		}
 		ArrayList li=resultSetToArrayList(rs);
-		try {
-			rs.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return li;
-	}
-	public void test()
-	{
-	
-		Connection connection = null;
-		try {
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		SQLiteConfig config = new SQLiteConfig();  
-		config.enforceForeignKeys(true);  
-        try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        PreparedStatement statement = null;
-		try {
-			statement = connection.prepareStatement("insert into user(name,email_ID,password) values (?,?,?)");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-		try {
-			statement.setString(1, "vivek");
-			statement.setString(2,"vivek");
-			statement.setString(3,"asd");
-			statement.executeUpdate();
-			statement.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
 	}
 	public ArrayList getPortFolio(int uid) 
 	{
@@ -278,7 +230,8 @@ public class DbConnection {
 		return li;
 	}
 	public void addUser(String name,String email_id , String Password) 
-	{	Connection connection = null;
+	{
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -307,12 +260,13 @@ public class DbConnection {
 			statement.setString(3,Password);
 			statement.executeUpdate();
 			statement.close();
-			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			}
+		
+		        
+	}
 	public void updateAmt(int uid,float amount)
 	{
 		Connection connection = null;
@@ -325,7 +279,7 @@ public class DbConnection {
 		SQLiteConfig config = new SQLiteConfig();  
 		config.enforceForeignKeys(true);  
         try {
-			connection = DriverManager.getConnection("jdbc:sqlite:C:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -350,7 +304,7 @@ public class DbConnection {
 		
 		
 	}
-	public void sell(int uid , String stock,int quantity, float sellPrice ,float buyPrice) 
+	public void sell(int uid , String stock,int quantity, float sellPrice ,float buyPrice,boolean shortsell) 
 	{
 		Connection connection = null;
 		try {
@@ -393,7 +347,7 @@ public class DbConnection {
 		
 		PreparedStatement stmt = null;
 		try {
-			stmt = connection.prepareStatement("select quantity from PortFolio where userID= ? and stock = ? and Price=? ");
+			stmt = connection.prepareStatement("select quantity from PortFolio where userID= ? and stock = ? and Price=? and shortsell=?");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -402,15 +356,16 @@ public class DbConnection {
 			stmt.setInt(1, uid);
 			stmt.setString(2, stock);
 			stmt.setFloat(3, buyPrice);
+			stmt.setBoolean(4, shortsell);
 			ResultSet rs=stmt.executeQuery();
 			int x=rs.getInt(1);
 			if(x==quantity)
 			{
-				statement = connection.prepareStatement("delete from  portfolio where userID= ? and stock = ? and Price=? ");
+				statement = connection.prepareStatement("delete from  portfolio where userID= ? and stock = ? and Price=? and shortsell=?");
 				statement.setInt(1, uid);
 				statement.setString(2, stock);
 				statement.setFloat(3, buyPrice);
-				
+				statement.setBoolean(4, shortsell);
 				statement.executeUpdate();
 				statement.close();
 			}
@@ -435,8 +390,7 @@ public class DbConnection {
 		}
 		
 	}	
-	@SuppressWarnings("resource")
-	public void buy(int uid , String stock,int quantity, float buyPrice ) 
+	public void buy(int uid , String stock,int quantity, float buyPrice ,boolean shortsell) 
 	{
 		Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SS");
@@ -477,11 +431,11 @@ public class DbConnection {
 		ResultSet rs=null;
 		try
 		{
-			 stmt = connection.prepareStatement("select * from PortFolio where userID= ? and stock = ? and Price=? ");
+			 stmt = connection.prepareStatement("select * from PortFolio where userID= ? and stock = ? and Price=? and shortsell=?");
 			 stmt.setInt(1, uid);
 			 stmt.setString(2, stock);
 			 stmt.setFloat(3, buyPrice);
-		
+			 stmt.setBoolean(4, shortsell);
 			 rs=stmt.executeQuery();
 		}
 		catch(Exception ex)
@@ -491,7 +445,7 @@ public class DbConnection {
 		try {
 			if(!rs.next())
 			{
-				statement = connection.prepareStatement("insert into portfolio values(?,?,?,?)");
+				statement = connection.prepareStatement("insert into portfolio values(?,?,?,?,0)");
 				statement.setInt(1, uid);
 				statement.setString(2, stock);
 				statement.setInt(3,quantity);
@@ -514,6 +468,7 @@ public class DbConnection {
 			statement.setInt(2, uid);
 			statement.executeUpdate();
 			statement.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -600,7 +555,6 @@ public class DbConnection {
 		    row = new HashMap(columns);
 		    for(int i=1; i<=columns; ++i)          
 		    	row.put(md.getColumnName(i),rs.getObject(i));
-		    connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -657,14 +611,9 @@ public class DbConnection {
 	}
 	public static void main(String[] args) 
 	  {
-		 DbConnection s1=new DbConnection();
-		// s1.addUser("msd", "ms@d", "abc");
-		 System.out.print( s1.getRanking());
-		
-		 
-		 //s1.test();
-			//s1.print();
-			//s1.display();
+		 DbConnetion s1=new DbConnetion();
+			s1.print();
+			s1.display();
 			}
 
 }

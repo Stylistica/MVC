@@ -147,12 +147,9 @@
         <error-code>404</error-code>
         <location>/404.jsp</location>
     </error-page>
-<!--
-at the end
 <error-page>
   <exception-type>java.lang.Exception</exception-type>
   <location>/Error.jsp</location>
 </error-page>
--->
 
 </web-app>
