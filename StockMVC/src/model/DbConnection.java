@@ -192,7 +192,7 @@ public class DbConnection {
 			rs = statement.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		ArrayList li=resultSetToArrayList(rs);
 		try {
@@ -269,14 +269,16 @@ public class DbConnection {
 		}
 		    
 	    ResultSet rs = null;
+	    ArrayList li=null;
 		try {
 			rs = statement.executeQuery();
+			li=resultSetToArrayList(rs);
 			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ArrayList li=resultSetToArrayList(rs);
+		
 		return li;
 	}
 	public void addUser(String name,String email_id , String Password) 
@@ -572,8 +574,7 @@ public class DbConnection {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			
-			e.printStackTrace();
-			return 0;
+			return -1;
 		}
 	}	
 	public HashMap getUser(int uid) 
@@ -612,7 +613,7 @@ public class DbConnection {
 		    connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}	    
 	   	return row;
 	}
@@ -620,6 +621,7 @@ public class DbConnection {
 	public String getPassword(String emailId)
 	{
 		Connection connection = null;
+		String ret=null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -636,7 +638,7 @@ public class DbConnection {
 		}
 		PreparedStatement statement = null;
 		try {
-			statement = connection.prepareStatement("select password from user where email_ID= ?");
+			statement = connection.prepareStatement("select password from user where email_ID= ?",ResultSet.TYPE_SCROLL_SENSITIVE);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -651,25 +653,80 @@ public class DbConnection {
 		ResultSet rs = null;
 		try {
 			rs = statement.executeQuery();
+			//ret= rs.getString(1);
+			ret= rs.getString(1);
+			connection.close();
+			
+			
+			
+		} catch (SQLException e) {
+			ret= "-1";
+		
+			// TODO Auto-generated catch block
+			
+		}
+		return ret;
+		
+	}
+	
+	
+	public int getUID(String emailId)
+	{
+		Connection connection = null;
+		int ret=0;
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SQLiteConfig config = new SQLiteConfig();  
+		config.enforceForeignKeys(true);  
+        try {
+			connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Avva\\git\\MVC\\StockMVC\\stock.db",config.toProperties());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement("select userid from user where email_ID= ?",ResultSet.TYPE_SCROLL_SENSITIVE);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			connection.close();
-			return rs.getString(1);
+			statement.setString(1,emailId);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			
 			e.printStackTrace();
-			return null;
 		}
+		ResultSet rs = null;
+		try {
+			rs = statement.executeQuery();
+			//ret= rs.getString(1);
+			ret= rs.getInt(1);
+			connection.close();
+			
+			
+			
+		} catch (SQLException e) {
+			ret= -1;
+		
+			// TODO Auto-generated catch block
+			
+		}
+		return ret;
+		
 	}
 	public static void main(String[] args) 
 	  {
 		 DbConnection s1=new DbConnection();
-		s1.sell(2,"AAPL",5,340.8f,340.4f);
-		 System.out.print( s1.getRanking());
+		 
+		//s1.sell(2,"AAPL",5,340.8f,340.4f);
+		 System.out.println( s1.getRanking());
+		 System.out.println( s1.getUID("vivek"));
 		
 		 
 		 //s1.test();
